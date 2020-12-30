@@ -1,6 +1,7 @@
 package com.health.Ehealth.Entities;
 
 import java.io.Serializable;
+import java.util.List;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -8,24 +9,21 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-
 @Entity
-public class Repas implements Serializable{
+public class Exercice implements Serializable{
 	@Id 
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private Long id;
 	
+	
 	@ManyToOne
-	@JoinColumn(name="CODE_REGIME")
-	private Regime regime;
+	@JoinColumn(name="CODE_SEA")
+	private Seance seance;
 	
-	
-	private String contenu;
-	public Repas(Long id, Regime regime, String contenu) {
+	public Exercice(Long id, Seance seance) {
 		super();
 		this.id = id;
-		this.regime = regime;
-		this.contenu = contenu;
+		this.seance = seance;
 	}
 	public Long getId() {
 		return id;
@@ -33,17 +31,11 @@ public class Repas implements Serializable{
 	public void setId(Long id) {
 		this.id = id;
 	}
-	public Regime getRegime() {
-		return regime;
+	public Seance getSeance() {
+		return seance;
 	}
-	public void setRegime(Regime regime) {
-		this.regime = regime;
-	}
-	public String getContenu() {
-		return contenu;
-	}
-	public void setContenu(String contenu) {
-		this.contenu = contenu;
+	public void setSeance(Seance seance) {
+		this.seance = seance;
 	}
 	
 }

@@ -1,20 +1,34 @@
 package com.health.Ehealth.Entities;
 
-public class Nutritionniste {
-	private int id;
+import java.io.Serializable;
+import java.util.List;
+
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
+
+@Entity
+public class Nutritionniste implements Serializable{
+	@Id 
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
+	private Long id;
 	private String firstName;
 	private String lastName;
 	private String email;
 	private String password;
-	private EquipeNutritionniste equipe;
 	
-	public Nutritionniste() {
-		
-	}
-	public int getId() {
+	@OneToMany(mappedBy="nutritionniste",fetch=FetchType.LAZY)
+	private List<EquipeNutritionniste> equipe;
+	
+	public Long getId() {
 		return id;
 	}
-	public void setId(int id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
 	public String getFirstName() {
@@ -41,23 +55,6 @@ public class Nutritionniste {
 	public void setPassword(String password) {
 		this.password = password;
 	}
-	public EquipeNutritionniste getEquipe() {
-		return equipe;
-	}
-	public void setEquipe(EquipeNutritionniste equipe) {
-		this.equipe = equipe;
-	}
-	public Nutritionniste(int id, String firstName, String lastName, String email, String password,
-			EquipeNutritionniste equipe) {
-		super();
-		this.id = id;
-		this.firstName = firstName;
-		this.lastName = lastName;
-		this.email = email;
-		this.password = password;
-		this.equipe = equipe;
-	}
-	
 	
 	
 }

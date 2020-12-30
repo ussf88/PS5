@@ -1,50 +1,47 @@
+
 package com.health.Ehealth.Entities;
 
-import javax.persistence.*;
+import java.io.Serializable;
+
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 
 @Entity
-public class Joueur {
-	
-	@Id
-	@GeneratedValue
-	@Column(name="id")
-	private int id;
-	
-	@Column(name="firstname")
+public class Joueur implements Serializable{
+	@Id 
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
+	private Long id;
 	private String firstName;
-	
-	@Column(name="lastname")
 	private String lastName;
-	
-	@Column(name="email")
 	private String email;
-	
-	@Column(name="password")
 	private String password;
+	@ManyToOne
+	@JoinColumn(name="CODE_EC")
+	private EquipeCoach equipeCoach;
 	
-
-	//private EquipeCoach equipeCoach;
+	@ManyToOne
+	@JoinColumn(name="CODE_EN")
+	private EquipeNutritionniste equipeNutritionniste;
 	
-
-	//private EquipeNutritionniste equipeNutrionniste;
-	
-	
-	
-	public Joueur(int id, String firstName, String lastName, String email, String password) {
+	public Joueur(Long id, String firstName, String lastName, String email, String password, EquipeCoach equipeCoach,
+			EquipeNutritionniste equipeNutrionniste) {
 		super();
 		this.id = id;
 		this.firstName = firstName;
 		this.lastName = lastName;
 		this.email = email;
 		this.password = password;
+		this.equipeCoach = equipeCoach;
+		this.equipeNutritionniste = equipeNutrionniste;
 	}
-	public Joueur() {
-		
-	}
-	public int getId() {
+	public Long getId() {
 		return id;
 	}
-	public void setId(int id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
 	public String getFirstName() {
@@ -71,7 +68,18 @@ public class Joueur {
 	public void setPassword(String password) {
 		this.password = password;
 	}
-
+	public EquipeCoach getEquipeCoach() {
+		return equipeCoach;
+	}
+	public void setEquipeCoach(EquipeCoach equipeCoach) {
+		this.equipeCoach = equipeCoach;
+	}
+	public EquipeNutritionniste getEquipeNutrionniste() {
+		return equipeNutritionniste;
+	}
+	public void setEquipeNutrionniste(EquipeNutritionniste equipeNutrionniste) {
+		this.equipeNutritionniste = equipeNutrionniste;
+	}
 	
 	
 	

@@ -1,19 +1,33 @@
 package com.health.Ehealth.Entities;
 
-public class Coach {
-	private int id;
+import java.io.Serializable;
+import java.util.List;
+
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.OneToMany;
+
+@Entity
+public class Coach implements Serializable{
+	@Id 
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
+	private Long id;
 	private String firstName;
 	private String lastName;
 	private String email;
 	private String password;
-	private EquipeCoach equipe;
-	public Coach() {
-		
-	}
-	public int getId() {
+	@OneToMany(mappedBy="coach",fetch=FetchType.LAZY)
+	private List<EquipeCoach> equipe;
+	
+	public Coach() {}
+	
+	public Long getId() {
 		return id;
 	}
-	public void setId(int id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
 	public String getFirstName() {
@@ -39,21 +53,6 @@ public class Coach {
 	}
 	public void setPassword(String password) {
 		this.password = password;
-	}
-	public EquipeCoach getEquipe() {
-		return equipe;
-	}
-	public void setEquipe(EquipeCoach equipe) {
-		this.equipe = equipe;
-	}
-	public Coach(int id, String firstName, String lastName, String email, String password, EquipeCoach equipe) {
-		super();
-		this.id = id;
-		this.firstName = firstName;
-		this.lastName = lastName;
-		this.email = email;
-		this.password = password;
-		this.equipe = equipe;
 	}
 	
 	
