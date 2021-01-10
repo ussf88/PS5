@@ -15,7 +15,7 @@ import javax.persistence.OneToMany;
 public class Regime implements Serializable{
 	@Id 
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
-	@Column(name = "regime_id")
+	
 	private Long id;
 	
 	@OneToMany(mappedBy="regime",fetch=FetchType.LAZY)

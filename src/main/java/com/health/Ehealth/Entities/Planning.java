@@ -15,7 +15,7 @@ import javax.persistence.OneToMany;
 public class Planning implements Serializable{
 	@Id 
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
-	@Column(name = "planning_id")
+	
 	private Long id;
 	
 	@OneToMany(mappedBy="planning",fetch=FetchType.LAZY)
