@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -18,6 +19,14 @@ import com.health.Ehealth.Service.EquipeCoachService;
 public class EquipeCoachRest {
 	@Autowired
 	private EquipeCoachService equipeCoachService;
+	
+	@PostMapping("/equipeCoachs")
+	public EquipeCoach saveEquipecoach(@RequestBody EquipeCoach equipeCoach) {
+		equipeCoach.setId(0l);
+		
+           return equipeCoachService.save(equipeCoach);
+		
+	}
 	@GetMapping("/equipeCoachs")
 	public List<EquipeCoach> listEquipeCoach(){
 		return equipeCoachService.findAll();
@@ -34,7 +43,7 @@ public class EquipeCoachRest {
 		return equipeCoach;
 	}
 	@PutMapping("/equipeCoachs")
-	public EquipeCoach saveEquipeCoach(@RequestBody EquipeCoach equipeCoach) {
+	public EquipeCoach updateEquipeCoach(@RequestBody EquipeCoach equipeCoach) {
 		
 		equipeCoachService.save(equipeCoach);
 		

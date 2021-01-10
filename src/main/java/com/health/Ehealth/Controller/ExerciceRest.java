@@ -18,14 +18,14 @@ public class ExerciceRest {
 	@Autowired
 	private ExerciceService exerciceService;
 	@PostMapping("/exercices")
-	public Exercice saveCoach(@RequestBody Exercice exercice) {
+	public Exercice saveExercice(@RequestBody Exercice exercice) {
            exercice.setId(0l);
 		
            return exerciceService.save(exercice);
 		
 	}
 	@GetMapping("/exercices/{theId}")
-	public Exercice getCoach(@PathVariable Long theId) {
+	public Exercice getExercice(@PathVariable Long theId) {
 		
 		Exercice exercice = exerciceService.findById(theId);
 		
@@ -36,14 +36,14 @@ public class ExerciceRest {
 		return exercice;
 	}
 	@PutMapping("/exercice")
-	public Exercice updateCoach(@RequestBody Exercice exercice) {
+	public Exercice updateExercice(@RequestBody Exercice exercice) {
 		
 		exerciceService.save(exercice);
 		
 		return exercice;
 	}
-	@DeleteMapping("/exercices/{eheId}")
-	public String deleteCoach(@PathVariable Long theId) {
+	@DeleteMapping("/exercices/{theId}")
+	public String deleteExercice(@PathVariable Long theId) {
 		
 		Exercice exercice = exerciceService.findById(theId);
 		

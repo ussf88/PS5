@@ -52,8 +52,8 @@ public class NutritionnisteRest {
 	}
 	
 	
-	@DeleteMapping("/coachs/{coachId}")
-	public String deleteCoach(@PathVariable Long theId) {
+	@DeleteMapping("/nutritionnistes/{theId}")
+	public String deleteNutritionniste(@PathVariable Long theId) {
 		
 		Nutritionniste nutritionniste = nutritionnisteSrvice.findById(theId);
 		
