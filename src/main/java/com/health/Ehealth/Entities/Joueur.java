@@ -2,6 +2,8 @@
 package com.health.Ehealth.Entities;
 
 import java.io.Serializable;
+import java.util.HashSet;
+import java.util.Set;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -9,16 +11,17 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.PrimaryKeyJoinColumn;
+
+import com.health.Ehealth.modal.ERole;
+import com.health.Ehealth.modal.Role;
+import com.health.Ehealth.modal.User;
 
 @Entity
-public class Joueur implements Serializable{
-	@Id 
-	@GeneratedValue(strategy=GenerationType.IDENTITY)
-	private Long id;
+@PrimaryKeyJoinColumn(name = "JoueurId")
+public class Joueur extends User{
 	private String firstName;
 	private String lastName;
-	private String email;
-	private String password;
 	@ManyToOne
 	@JoinColumn(name="CODE_EC")
 	private EquipeCoach equipeCoach;
@@ -27,22 +30,21 @@ public class Joueur implements Serializable{
 	@JoinColumn(name="CODE_EN")
 	private EquipeNutritionniste equipeNutritionniste;
 	
-	public Joueur(Long id, String firstName, String lastName, String email, String password, EquipeCoach equipeCoach,
+	public Joueur(String username, String email, String password, String firstName, String lastName, EquipeCoach equipeCoach,
 			EquipeNutritionniste equipeNutrionniste) {
-		super();
-		this.id = id;
+		 super( username,email,password);
 		this.firstName = firstName;
 		this.lastName = lastName;
-		this.email = email;
-		this.password = password;
 		this.equipeCoach = equipeCoach;
 		this.equipeNutritionniste = equipeNutrionniste;
 	}
-	public Long getId() {
-		return id;
-	}
-	public void setId(Long id) {
-		this.id = id;
+	public Joueur(User user , String firstName, String lastName, EquipeCoach equipeCoach,
+			EquipeNutritionniste equipeNutrionniste) {
+		super(user.getUsername(),user.getEmail(),user.getPassword());
+		this.firstName = firstName;
+		this.lastName = lastName;
+		this.equipeCoach = equipeCoach;
+		this.equipeNutritionniste = equipeNutrionniste;
 	}
 	public String getFirstName() {
 		return firstName;
@@ -56,18 +58,6 @@ public class Joueur implements Serializable{
 	public void setLastName(String lastName) {
 		this.lastName = lastName;
 	}
-	public String getEmail() {
-		return email;
-	}
-	public void setEmail(String email) {
-		this.email = email;
-	}
-	public String getPassword() {
-		return password;
-	}
-	public void setPassword(String password) {
-		this.password = password;
-	}
 	public EquipeCoach getEquipeCoach() {
 		return equipeCoach;
 	}
@@ -79,6 +69,12 @@ public class Joueur implements Serializable{
 	}
 	public void setEquipeNutrionniste(EquipeNutritionniste equipeNutrionniste) {
 		this.equipeNutritionniste = equipeNutrionniste;
+	}
+	public EquipeNutritionniste getEquipeNutritionniste() {
+		return equipeNutritionniste;
+	}
+	public void setEquipeNutritionniste(EquipeNutritionniste equipeNutritionniste) {
+		this.equipeNutritionniste = equipeNutritionniste;
 	}
 	
 	

@@ -2,6 +2,9 @@ package com.health.Ehealth.Controller;
 
 import java.util.HashSet;
 import com.health.Ehealth.DAO.*;
+import com.health.Ehealth.Entities.EquipeCoach;
+import com.health.Ehealth.Entities.EquipeNutritionniste;
+import com.health.Ehealth.Entities.Joueur;
 import com.health.Ehealth.modal.*;
 import com.health.Ehealth.security.*;
 import com.health.Ehealth.security.payloads.JwtResponse;
@@ -35,9 +38,11 @@ import org.springframework.web.bind.annotation.RestController;
 public class AuthController {
 	@Autowired
 	AuthenticationManager authenticationManager;
-
 	@Autowired
 	UserRepository userRepository;
+	
+	@Autowired
+	JoueurRepository joueurRepository;
 
 	@Autowired
 	RoleRepository roleRepository;
@@ -71,22 +76,22 @@ public class AuthController {
 
 	@PostMapping("/signup")
 	public ResponseEntity<?> registerUser(@Valid @RequestBody SignupRequest signUpRequest) {
-		if (userRepository.existsByUsername(signUpRequest.getUsername())) {
+		if (userRepository.existsByUsername(signUpRequest.getUser().getUsername())) {
 			return ResponseEntity
 					.badRequest()
 					.body(new MessageResponse("Error: Username is already taken!"));
 		}
 
-		if (userRepository.existsByEmail(signUpRequest.getEmail())) {
+		if (userRepository.existsByEmail(signUpRequest.getUser().getEmail())) {
 			return ResponseEntity
 					.badRequest()
 					.body(new MessageResponse("Error: Email is already in use!"));
 		}
 
 		// Create new user's account
-		User user = new User(signUpRequest.getUsername(), 
-							 signUpRequest.getEmail(),
-							 encoder.encode(signUpRequest.getPassword()));
+		User user = new User(signUpRequest.getUser().getUsername(), 
+							 signUpRequest.getUser().getEmail(),
+							 encoder.encode(signUpRequest.getUser().getPassword()));
 
 		Set<String> strRoles = signUpRequest.getRole();
 		Set<Role> roles = new HashSet<>();
@@ -110,6 +115,15 @@ public class AuthController {
 					roles.add(modRole);
 
 					break;
+				case "joueur":
+					Role JRole = roleRepository.findByName(ERole.JOUEUR)
+							.orElseThrow(() -> new RuntimeException("Error: Role is not found."));
+					roles.add(JRole);
+					Joueur joueur=new Joueur (user,user.getfirstName(), String lastName, EquipeCoach equipeCoach,
+							EquipeNutritionniste equipeNutrionniste);
+					joueurRepository.save(joueur);
+
+					break;
 				default:
 					Role userRole = roleRepository.findByName(ERole.ROLE_USER)
 							.orElseThrow(() -> new RuntimeException("Error: Role is not found."));
@@ -117,9 +131,6 @@ public class AuthController {
 				}
 			});
 		}
-
-		user.setRoles(roles);
-		userRepository.save(user);
 
 		return ResponseEntity.ok(new MessageResponse("User registered successfully!"));
 	}
