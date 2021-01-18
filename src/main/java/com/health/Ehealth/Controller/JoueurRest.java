@@ -23,7 +23,6 @@ public class JoueurRest {
 		return joueurRepository.findAll();
 		
 	}
-	
 	@PostMapping("/adduser")
 	public List<Joueur> AddUsers(@RequestBody final Joueur joueur ){
 		joueurRepository.save(joueur);

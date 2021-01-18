@@ -2,21 +2,18 @@ package com.health.Ehealth.security.payloads;
 
 import java.util.List;
 
+import com.health.Ehealth.modal.User;
+
 public class JwtResponse {
 	private String token;
 	private String type = "Bearer";
-	private Long id;
-	private String username;
-	private String email;
-	private List<String> roles;
+	private User user;
 
-	public JwtResponse(String accessToken, Long id, String username, String email, List<String> roles) {
+	public JwtResponse(String accessToken,User user) {
 		this.token = accessToken;
-		this.id = id;
-		this.username = username;
-		this.email = email;
-		this.roles = roles;
+		this.user=user;
 	}
+
 
 	public String getAccessToken() {
 		return token;
@@ -34,31 +31,12 @@ public class JwtResponse {
 		this.type = tokenType;
 	}
 
-	public Long getId() {
-		return id;
+	public User getUser() {
+		return user;
 	}
 
-	public void setId(Long id) {
-		this.id = id;
+	public void setUser(User user) {
+		this.user = user;
 	}
 
-	public String getEmail() {
-		return email;
-	}
-
-	public void setEmail(String email) {
-		this.email = email;
-	}
-
-	public String getUsername() {
-		return username;
-	}
-
-	public void setUsername(String username) {
-		this.username = username;
-	}
-
-	public List<String> getRoles() {
-		return roles;
-	}
 }

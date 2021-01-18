@@ -29,10 +29,13 @@ public class Joueur extends User{
 	@ManyToOne
 	@JoinColumn(name="CODE_EN")
 	private EquipeNutritionniste equipeNutritionniste;
+	public Joueur() {
+		
+	}
 	
-	public Joueur(String username, String email, String password, String firstName, String lastName, EquipeCoach equipeCoach,
+	public Joueur(String username, String email, String password,Set<Role> roles, String firstName, String lastName, EquipeCoach equipeCoach,
 			EquipeNutritionniste equipeNutrionniste) {
-		 super( username,email,password);
+		 super( username,email,password,roles);
 		this.firstName = firstName;
 		this.lastName = lastName;
 		this.equipeCoach = equipeCoach;
@@ -40,7 +43,7 @@ public class Joueur extends User{
 	}
 	public Joueur(User user , String firstName, String lastName, EquipeCoach equipeCoach,
 			EquipeNutritionniste equipeNutrionniste) {
-		super(user.getUsername(),user.getEmail(),user.getPassword());
+		super(user.getUsername(),user.getEmail(),user.getPassword(),user.getRoles());
 		this.firstName = firstName;
 		this.lastName = lastName;
 		this.equipeCoach = equipeCoach;

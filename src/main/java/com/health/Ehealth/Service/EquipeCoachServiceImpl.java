@@ -50,4 +50,10 @@ public class EquipeCoachServiceImpl implements EquipeCoachService{
 		equipeCoachRepository.deleteById(theId);
 	}
 
+	@Override
+	public List<EquipeCoach> findByCoach(Long coachId) {
+		equipeCoachRepository.findByCoach(coachId);
+		return null;
+	}
+
 }

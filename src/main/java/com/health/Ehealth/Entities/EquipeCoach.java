@@ -12,13 +12,16 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
+
+import com.fasterxml.jackson.annotation.JsonBackReference;
 @Entity
 public class EquipeCoach implements Serializable{
 	@Id 
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private Long id;
 	
-	@ManyToOne
+	@JsonBackReference
+	@ManyToOne(fetch=FetchType.LAZY)
 	@JoinColumn(name="CODE_COA")
 	private Coach coach;
 	
@@ -30,7 +33,9 @@ public class EquipeCoach implements Serializable{
 	@JoinColumn(name="planning_id")
 	private Planning planning;
 	
-	
+	public EquipeCoach() {
+		
+	}
 	public EquipeCoach(Long id, Coach coach, List<Joueur> joueurs, Planning planning) {
 		super();
 		this.id = id;

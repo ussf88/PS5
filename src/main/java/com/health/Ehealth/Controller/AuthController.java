@@ -1,10 +1,15 @@
 package com.health.Ehealth.Controller;
-
 import java.util.HashSet;
 import com.health.Ehealth.DAO.*;
+import com.health.Ehealth.Entities.Coach;
 import com.health.Ehealth.Entities.EquipeCoach;
 import com.health.Ehealth.Entities.EquipeNutritionniste;
 import com.health.Ehealth.Entities.Joueur;
+import com.health.Ehealth.Entities.Nutritionniste;
+import com.health.Ehealth.Service.CoachService;
+import com.health.Ehealth.Service.EquipeNutritionnisteService;
+import com.health.Ehealth.Service.JoueurService;
+import com.health.Ehealth.Service.NutritionnisteService;
 import com.health.Ehealth.modal.*;
 import com.health.Ehealth.security.*;
 import com.health.Ehealth.security.payloads.JwtResponse;
@@ -30,8 +35,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
-
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
 @RequestMapping("/api/auth")
@@ -42,8 +45,13 @@ public class AuthController {
 	UserRepository userRepository;
 	
 	@Autowired
-	JoueurRepository joueurRepository;
-
+	JoueurService joueurService;
+	
+	@Autowired
+	CoachService coachService;
+	
+	@Autowired
+	NutritionnisteService nutritionnisteService;
 	@Autowired
 	RoleRepository roleRepository;
 
@@ -52,7 +60,7 @@ public class AuthController {
 
 	@Autowired
 	JwtUtils jwtUtils;
-
+	private Joueur save;
 	@PostMapping("/signin")
 	public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest loginRequest) {
 
@@ -66,72 +74,105 @@ public class AuthController {
 		List<String> roles = userDetails.getAuthorities().stream()
 				.map(item -> item.getAuthority())
 				.collect(Collectors.toList());
-
-		return ResponseEntity.ok(new JwtResponse(jwt, 
-												 userDetails.getId(), 
-												 userDetails.getUsername(), 
-												 userDetails.getEmail(), 
-												 roles));
+		System.out.println("=====================>"+roles.get(0));
+		User user=null;
+		switch(roles.get(0)) {
+		case "JOUEUR":
+			user = joueurService.findById(userDetails.getId());break;
+		case "COACH":
+			user = coachService.findById(userDetails.getId());break;
+		case "NUTRITIONNISTE":
+			user = nutritionnisteService.findById(userDetails.getId());break;
+		}
+		return ResponseEntity.ok(new JwtResponse(jwt, user));
 	}
-
 	@PostMapping("/signup")
-	public ResponseEntity<?> registerUser(@Valid @RequestBody SignupRequest signUpRequest) {
-		if (userRepository.existsByUsername(signUpRequest.getUser().getUsername())) {
+	public ResponseEntity<?> registerUser(@Valid @RequestBody Joueur joueur) {
+		Set<Role> roles = new HashSet<>();
+		Role JRole = roleRepository.findByName(ERole.JOUEUR);
+		roles.add(JRole);
+		User user=new User(joueur.getUsername(),joueur.getEmail(),joueur.getPassword(),roles);
+		
+		if (userRepository.existsByUsername(user.getUsername())) {
 			return ResponseEntity
 					.badRequest()
 					.body(new MessageResponse("Error: Username is already taken!"));
 		}
 
-		if (userRepository.existsByEmail(signUpRequest.getUser().getEmail())) {
+		if (userRepository.existsByEmail(user.getEmail())) {
 			return ResponseEntity
 					.badRequest()
 					.body(new MessageResponse("Error: Email is already in use!"));
 		}
+				 user.setPassword(encoder.encode(user.getPassword()));
 
-		// Create new user's account
-		User user = new User(signUpRequest.getUser().getUsername(), 
-							 signUpRequest.getUser().getEmail(),
-							 encoder.encode(signUpRequest.getUser().getPassword()));
+			
+			    user.setRoles(roles);
+			    Joueur j=new Joueur(user,joueur.getFirstName(), joueur.getLastName(), joueur.getEquipeCoach(),
+						joueur.getEquipeNutritionniste());
+			    joueurService.save(j);
 
-		Set<String> strRoles = signUpRequest.getRole();
-		Set<Role> roles = new HashSet<>();
-
-		if (strRoles == null) {
-			Role userRole = roleRepository.findByName(ERole.ROLE_USER)
-					.orElseThrow(() -> new RuntimeException("Error: Role is not found."));
-			roles.add(userRole);
-		} else {
-			strRoles.forEach(role -> {
-				switch (role) {
-				case "admin":
-					Role adminRole = roleRepository.findByName(ERole.ROLE_ADMIN)
-							.orElseThrow(() -> new RuntimeException("Error: Role is not found."));
-					roles.add(adminRole);
-
-					break;
-				case "mod":
-					Role modRole = roleRepository.findByName(ERole.ROLE_MODERATOR)
-							.orElseThrow(() -> new RuntimeException("Error: Role is not found."));
-					roles.add(modRole);
-
-					break;
-				case "joueur":
-					Role JRole = roleRepository.findByName(ERole.JOUEUR)
-							.orElseThrow(() -> new RuntimeException("Error: Role is not found."));
-					roles.add(JRole);
-					Joueur joueur=new Joueur (user,user.getfirstName(), String lastName, EquipeCoach equipeCoach,
-							EquipeNutritionniste equipeNutrionniste);
-					joueurRepository.save(joueur);
-
-					break;
-				default:
-					Role userRole = roleRepository.findByName(ERole.ROLE_USER)
-							.orElseThrow(() -> new RuntimeException("Error: Role is not found."));
-					roles.add(userRole);
+				return ResponseEntity.ok(new MessageResponse("User registered successfully!"));
+				
 				}
-			});
+	@PostMapping("/signup/coach")
+	public ResponseEntity<?> registerUser(@Valid @RequestBody Coach coach) {
+		Set<Role> roles = new HashSet<>();
+		Role JRole = roleRepository.findByName(ERole.COACH);
+		roles.add(JRole);
+		User user=new User(coach.getUsername(),coach.getEmail(),coach.getPassword(),roles);
+		
+		if (userRepository.existsByUsername(user.getUsername())) {
+			return ResponseEntity
+					.badRequest()
+					.body(new MessageResponse("Error: Username is already taken!"));
 		}
 
-		return ResponseEntity.ok(new MessageResponse("User registered successfully!"));
+		if (userRepository.existsByEmail(user.getEmail())) {
+			return ResponseEntity
+					.badRequest()
+					.body(new MessageResponse("Error: Email is already in use!"));
+		}
+				 user.setPassword(encoder.encode(user.getPassword()));
+
+			
+			    user.setRoles(roles);
+			    Coach c=new Coach(user,coach.getFirstName(),coach.getLastName(),coach.getEquipe());
+			    coachService.save(c);
+
+				return ResponseEntity.ok(new MessageResponse("User registered successfully!"));
+				
+				}
+	
+	@PostMapping("/signup/nutritionniste")
+	public ResponseEntity<?> registerUser(@Valid @RequestBody Nutritionniste nutritionniste) {
+		Set<Role> roles = new HashSet<>();
+		Role JRole = roleRepository.findByName(ERole.NUTRITIONNISTE);
+		roles.add(JRole);
+		User user=new User(nutritionniste.getUsername(),nutritionniste.getEmail(),nutritionniste.getPassword(),roles);
+		
+		if (userRepository.existsByUsername(user.getUsername())) {
+			return ResponseEntity
+					.badRequest()
+					.body(new MessageResponse("Error: Username is already taken!"));
+		}
+
+		if (userRepository.existsByEmail(user.getEmail())) {
+			return ResponseEntity
+					.badRequest()
+					.body(new MessageResponse("Error: Email is already in use!"));
+		}
+				 user.setPassword(encoder.encode(user.getPassword()));
+
+			
+			    user.setRoles(roles);
+			    Nutritionniste c=new Nutritionniste(user,nutritionniste.getFirstName(),nutritionniste.getLastName(),nutritionniste.getEquipe());
+			    nutritionnisteService.save(c);
+
+				return ResponseEntity.ok(new MessageResponse("User registered successfully!"));
+				
+				}
+		
 	}
-}
+	
+	
