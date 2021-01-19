@@ -15,10 +15,12 @@ public interface EquipeCoachService {
 	public List<EquipeCoach> findAll();
 	
 	public List<EquipeCoach> findByCoach(Long coachId);
+	
 	public EquipeCoach findById(Long theId);
 	
 	public EquipeCoach save(EquipeCoach equipeCoach);
 	
 	public void deleteById(Long theId);
+	
 
 }

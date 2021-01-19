@@ -52,8 +52,8 @@ public class EquipeCoachServiceImpl implements EquipeCoachService{
 
 	@Override
 	public List<EquipeCoach> findByCoach(Long coachId) {
-		equipeCoachRepository.findByCoach(coachId);
-		return null;
+		return equipeCoachRepository.findByCoach(coachId);
+		
 	}
 
 }

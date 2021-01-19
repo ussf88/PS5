@@ -34,8 +34,6 @@ public class EquipeCoachRest {
 	}
 	@GetMapping("/equipeCoachs/coach/{coachId}")
 	public List<EquipeCoach> listEquipeCoachByCaoch(@PathVariable Long coachId){
-		System.out.println("------------------------->Hi");
-		System.out.println("resullllllllt"+equipeCoachService.findByCoach(coachId));
 		return equipeCoachService.findByCoach(coachId);
 	}
 	@GetMapping("/equipeCoachs/{theId}")
