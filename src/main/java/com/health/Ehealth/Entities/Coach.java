@@ -61,6 +61,11 @@ public class Coach extends User{
 	public void setLastName(String lastName) {
 		this.lastName = lastName;
 	}
+
+	@Override
+	public String toString() {
+		return "Coach [firstName=" + firstName + ", lastName=" + lastName + ", equipe=" + equipe + "]";
+	}
 	
 	
 }

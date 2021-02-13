@@ -10,7 +10,7 @@ public interface SeanceService {
 	
 	public List<Seance> findAll();
 	
-	public Seance findById(Long theId);
+	public  Seance findById(Long theId);
 	
 	public Seance save(Seance seance);
 	

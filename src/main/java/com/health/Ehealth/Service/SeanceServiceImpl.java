@@ -38,7 +38,10 @@ public class SeanceServiceImpl implements SeanceService{
 
 	@Override
 	public Seance save(Seance seance) {
-		return seanceRepository.save(seance);
+		
+		Seance s=seanceRepository.save(seance);
+		seanceRepository.flush();
+		return s;
 	}
 
 	@Override
