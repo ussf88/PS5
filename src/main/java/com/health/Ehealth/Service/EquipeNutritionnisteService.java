@@ -19,4 +19,6 @@ public interface EquipeNutritionnisteService {
 	
 	public void deleteById(Long theId);
 
+	public List<EquipeNutritionniste> findByNutri(Long nutriId);
+
 }

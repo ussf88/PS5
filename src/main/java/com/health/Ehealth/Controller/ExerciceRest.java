@@ -58,12 +58,17 @@ public class ExerciceRest {
 		
 		return exercice;
 	}
-	@PutMapping("/exercice")
-	public Exercice updateExercice(@RequestBody Exercice exercice) {
+	@PutMapping("/exercice/{theId}")
+	public Exercice updateExercice(@RequestBody Exercice exercice,@PathVariable Long theId) {
 		
-		exerciceService.save(exercice);
+		Exercice original=exerciceService.findById(theId);
+		System.out.println("exooooooooo"+exercice.toString());
+		original.setContenu(exercice.getContenu());
+		original.setDuration(exercice.getDuration());
+		System.out.println("originaaaaaaaal"+original.toString());
+		exerciceService.save(original);
 		
-		return exercice;
+		return original;
 	}
 	@DeleteMapping("/exercices/{theId}")
 	public String deleteExercice(@PathVariable Long theId) {

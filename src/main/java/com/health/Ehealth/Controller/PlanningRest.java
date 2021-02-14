@@ -14,8 +14,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.health.Ehealth.Entities.Coach;
+import com.health.Ehealth.Entities.EquipeCoach;
 import com.health.Ehealth.Entities.Planning;
 import com.health.Ehealth.Service.CoachService;
+import com.health.Ehealth.Service.EquipeCoachService;
 import com.health.Ehealth.Service.PlanningService;
 
 @CrossOrigin
@@ -24,12 +26,19 @@ public class PlanningRest {
 	
 	@Autowired
 	private PlanningService planningService;
-	@PostMapping("/planning")
-	public Planning savePlanning(@RequestBody Planning planning) {
-		System.out.println("hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh"+planning.toString());
-           planning.setId(0l);
+	
+
+	@Autowired
+	private EquipeCoachService equipeCaochService;
+	
+	@PostMapping("/planning/{Equipeid}")
+	public Planning savePlanning(@RequestBody Planning planning,@PathVariable Long Equipeid ) {
+		EquipeCoach original =equipeCaochService.findById(Equipeid);
+		  planning.setId(0l);
+		original.setPlanning(planning);
 		
-           return planningService.save(planning);
+           equipeCaochService.save(original);
+           return planning;
 		
 	}
 	@GetMapping("/planning")

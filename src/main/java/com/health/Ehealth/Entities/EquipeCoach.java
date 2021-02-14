@@ -3,6 +3,7 @@ package com.health.Ehealth.Entities;
 import java.io.Serializable;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -29,7 +30,7 @@ public class EquipeCoach implements Serializable{
 	@OneToMany(mappedBy="equipeCoach",fetch=FetchType.LAZY)
 	private List<Joueur> Joueurs;
 	
-	@OneToOne
+	@OneToOne(cascade=CascadeType.ALL)
 	@JoinColumn(name="planning_id")
 	private Planning planning;
 	

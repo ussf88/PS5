@@ -28,6 +28,10 @@ public class EquipeNutritionnisteRest {
            return equipeNutritionnisteService.save(equipeNutritionniste);
 		
 	}
+	@GetMapping("/equipeNutritionnistes/Nutri/{NutriId}")
+	public List<EquipeNutritionniste> listEquipeCoachByCaoch(@PathVariable Long NutriId){
+		return equipeNutritionnisteService.findByNutri(NutriId);
+	}
 	@GetMapping("/equipeNutritionnistes")
 	public List<EquipeNutritionniste> listEquipeNutritionniste(){
 		return equipeNutritionnisteService.findAll();

@@ -52,4 +52,9 @@ public class EquipeNutritionnisteImpl implements EquipeNutritionnisteService{
 		equipeNutritionnisteRepository.deleteById(theId);
 	}
 
+	@Override
+	public List<EquipeNutritionniste> findByNutri(Long nutriId) {
+		return equipeNutritionnisteRepository.findByCoach(nutriId);
+	}
+
 }

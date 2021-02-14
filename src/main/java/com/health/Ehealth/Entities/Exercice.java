@@ -25,7 +25,7 @@ public class Exercice implements Serializable{
 	private String contenu;
 	
 	
-	@ManyToOne(cascade=CascadeType.ALL)
+	@ManyToOne
 	@JoinColumn(name="CODE_SEA")
 	@JsonIgnore
 	private Seance seance;
@@ -60,5 +60,10 @@ public class Exercice implements Serializable{
 	public void setContenu(String contenu) {
 		this.contenu = contenu;
 	}
+	@Override
+	public String toString() {
+		return "Exercice [id=" + id + ", duration=" + duration + ", contenu=" + contenu + ", seance=" + seance + "]";
+	}
+	
 	
 }
